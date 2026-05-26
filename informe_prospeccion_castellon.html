@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de Prospección — Castellón de la Plana</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #1a1a2e; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: white; padding: 48px 40px 36px; position: relative; overflow: hidden;
+  }
+  .header::after {
+    content: ''; position: absolute; bottom: -30px; left: 0; right: 0; height: 60px;
+    background: #f0f2f5; border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  }
+  .header h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 8px; }
+  .header p { opacity: 0.75; font-size: 1rem; }
+  .header .meta { display: flex; gap: 32px; margin-top: 20px; flex-wrap: wrap; }
+  .header .meta span {
+    background: rgba(255,255,255,0.12); border-radius: 20px; padding: 6px 16px;
+    font-size: 0.85rem; font-weight: 500;
+  }
+
+  /* RESUMEN */
+  .container { max-width: 1200px; margin: 0 auto; padding: 60px 24px 40px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 48px; }
+  .card {
+    background: white; border-radius: 12px; padding: 24px; text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07); border-top: 4px solid #e94560;
+  }
+  .card.green { border-top-color: #10b981; }
+  .card.blue  { border-top-color: #3b82f6; }
+  .card.yellow{ border-top-color: #f59e0b; }
+  .card .num  { font-size: 2.8rem; font-weight: 800; color: #1a1a2e; line-height: 1; }
+  .card .label{ font-size: 0.82rem; color: #6b7280; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* SECTION TITLES */
+  h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 20px; color: #1a1a2e; display: flex; align-items: center; gap: 10px; }
+  h2 .icon { width: 32px; height: 32px; background: #e94560; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 1rem; flex-shrink: 0; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; margin-bottom: 60px; border-radius: 14px; box-shadow: 0 2px 16px rgba(0,0,0,0.08); }
+  table { width: 100%; border-collapse: collapse; background: white; }
+  thead tr { background: #1a1a2e; color: white; }
+  thead th { padding: 14px 16px; text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+  tbody tr { border-bottom: 1px solid #f1f5f9; transition: background 0.15s; }
+  tbody tr:hover { background: #f8fafc; }
+  tbody td { padding: 14px 16px; font-size: 0.92rem; vertical-align: middle; }
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
+  }
+  .badge.sin-web    { background: #fee2e2; color: #b91c1c; }
+  .badge.solo-redes { background: #fef3c7; color: #92400e; }
+  .badge.desact     { background: #e0f2fe; color: #0369a1; }
+  .badge.ok         { background: #d1fae5; color: #065f46; }
+
+  .score-bar { display: flex; align-items: center; gap: 8px; }
+  .bar { height: 8px; border-radius: 4px; background: #e94560; flex-shrink: 0; }
+  .score-num { font-weight: 700; font-size: 1rem; color: #1a1a2e; min-width: 26px; }
+
+  /* PROSPECT CARDS */
+  .prospect-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; margin-bottom: 60px; }
+  .pcard {
+    background: white; border-radius: 14px; padding: 28px; box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    border-left: 5px solid #e94560; position: relative; overflow: hidden;
+  }
+  .pcard::before {
+    content: attr(data-rank); position: absolute; top: -10px; right: 16px;
+    font-size: 4rem; font-weight: 900; color: #f0f2f5; line-height: 1; z-index: 0;
+  }
+  .pcard > * { position: relative; z-index: 1; }
+  .pcard h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; }
+  .pcard .sector { font-size: 0.8rem; color: #6b7280; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .pcard .info-row { display: flex; gap: 8px; margin-bottom: 6px; align-items: flex-start; }
+  .pcard .info-row .ico { font-size: 0.9rem; margin-top: 1px; flex-shrink: 0; }
+  .pcard .info-row span { font-size: 0.88rem; color: #374151; }
+  .pcard .score-big { font-size: 2.4rem; font-weight: 900; color: #e94560; float: right; line-height: 1; }
+  .pcard .problems { background: #fff7ed; border-radius: 8px; padding: 12px; margin: 14px 0; }
+  .pcard .problems p { font-size: 0.84rem; color: #92400e; margin-bottom: 4px; }
+  .pcard .problems p:last-child { margin-bottom: 0; }
+  .pcard .msg-block { background: #f0fdf4; border-radius: 8px; padding: 14px; border-left: 3px solid #10b981; margin-top: 14px; }
+  .pcard .msg-block .msg-title { font-size: 0.75rem; color: #065f46; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+  .pcard .msg-block p { font-size: 0.87rem; color: #1a1a2e; line-height: 1.55; }
+  .contact-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .contact-btn {
+    display: inline-block; padding: 7px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600;
+    text-decoration: none; cursor: pointer; border: none;
+  }
+  .btn-phone { background: #1a1a2e; color: white; }
+  .btn-email { background: #3b82f6; color: white; }
+  .btn-fb    { background: #1877f2; color: white; }
+  .btn-ig    { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); color: white; }
+
+  /* MENSAJES SECTION */
+  .msg-section { margin-bottom: 60px; }
+  .msg-card { background: white; border-radius: 14px; padding: 28px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+  .msg-card .msg-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .msg-card .msg-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+  .msg-card .msg-icon.email { background: #eff6ff; }
+  .msg-card .msg-icon.whatsapp { background: #f0fdf4; }
+  .msg-card h4 { font-size: 1rem; font-weight: 700; }
+  .msg-card .subtitle { font-size: 0.82rem; color: #6b7280; }
+  .msg-box { background: #f8fafc; border-radius: 8px; padding: 16px; font-size: 0.9rem; line-height: 1.65; color: #1a1a2e; white-space: pre-line; border: 1px solid #e2e8f0; }
+
+  /* JSON SECTION */
+  .json-section { margin-bottom: 60px; }
+  .json-box { background: #1a1a2e; color: #a8ff78; border-radius: 12px; padding: 24px; font-family: monospace; font-size: 0.82rem; overflow-x: auto; line-height: 1.6; }
+  .copy-btn {
+    background: #e94560; color: white; border: none; border-radius: 8px; padding: 8px 16px;
+    font-size: 0.85rem; font-weight: 600; cursor: pointer; margin-bottom: 12px; transition: background 0.15s;
+  }
+  .copy-btn:hover { background: #c73652; }
+
+  footer { text-align: center; padding: 32px; color: #9ca3af; font-size: 0.82rem; }
+  footer strong { color: #e94560; }
+
+  @media (max-width: 640px) {
+    .header h1 { font-size: 1.5rem; }
+    .prospect-grid { grid-template-columns: 1fr; }
+    thead th:nth-child(n+5) { display: none; }
+    tbody td:nth-child(n+5) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>Informe de Prospección Digital</h1>
+  <p>Análisis de presencia web · Oportunidades de diseño web en Castellón de la Plana</p>
+  <div class="meta">
+    <span>📍 Castellón de la Plana</span>
+    <span>🎯 Servicio: Diseño y renovación web</span>
+    <span>📅 Mayo 2026</span>
+    <span>🔍 20 negocios analizados</span>
+  </div>
+</div>
+
+<!-- RESUMEN -->
+<div class="container">
+  <div class="cards">
+    <div class="card">
+      <div class="num">20</div>
+      <div class="label">Negocios analizados</div>
+    </div>
+    <div class="card" style="border-top-color:#e94560">
+      <div class="num" style="color:#e94560">13</div>
+      <div class="label">Sin página web</div>
+    </div>
+    <div class="card yellow">
+      <div class="num" style="color:#f59e0b">4</div>
+      <div class="label">Solo redes sociales</div>
+    </div>
+    <div class="card blue">
+      <div class="num" style="color:#3b82f6">2</div>
+      <div class="label">Web desactualizada</div>
+    </div>
+    <div class="card green">
+      <div class="num" style="color:#10b981">1</div>
+      <div class="label">Web aceptable</div>
+    </div>
+  </div>
+
+  <!-- TABLA COMPLETA -->
+  <h2><span class="icon">📋</span> Todos los prospectos</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Negocio</th>
+          <th>Sector</th>
+          <th>Teléfono</th>
+          <th>Estado digital</th>
+          <th>Puntuación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td><strong>Luis Sos Fontanería</strong></td>
+          <td>Fontanería</td>
+          <td>—</td>
+          <td><span class="badge sin-web">Sin web</span></td>
+          <td><div class="score-bar"><span class="score-num">9.5</span><div class="bar" style="width:95px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td><strong>Joyería Font</strong></td>
+          <td>Joyería</td>
+          <td>964 242 618</td>
+          <td><span class="badge solo-redes">Solo Facebook</span></td>
+          <td><div class="score-bar"><span class="score-num">9.2</span><div class="bar" style="width:92px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td><strong>Ana Esteve Estilistas</strong></td>
+          <td>Peluquería</td>
+          <td>615 210 373</td>
+          <td><span class="badge sin-web">Sin web</span></td>
+          <td><div class="score-bar"><span class="score-num">9.0</span><div class="bar" style="width:90px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>4</strong></td>
+          <td><strong>Dani Vozme Hair Studio</strong></td>
+          <td>Peluquería</td>
+          <td>622 152 595</td>
+          <td><span class="badge sin-web">Sin web</span></td>
+          <td><div class="score-bar"><span class="score-num">8.8</span><div class="bar" style="width:88px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>5</strong></td>
+          <td><strong>Sandra Zahonero Estilistas</strong></td>
+          <td>Peluquería / Spa</td>
+          <td>964 063 858</td>
+          <td><span class="badge solo-redes">Solo Instagram</span></td>
+          <td><div class="score-bar"><span class="score-num">8.7</span><div class="bar" style="width:87px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>6</strong></td>
+          <td><strong>Talleres Ultimateauto</strong></td>
+          <td>Taller mecánico</td>
+          <td>628 678 720</td>
+          <td><span class="badge sin-web">Sin web</span></td>
+          <td><div class="score-bar"><span class="score-num">8.5</span><div class="bar" style="width:85px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>7</strong></td>
+          <td><strong>Peluquería Julia Garrido</strong></td>
+          <td>Peluquería</td>
+          <td>964 231 733</td>
+          <td><span class="badge solo-redes">Solo Facebook</span></td>
+          <td><div class="score-bar"><span class="score-num">8.3</span><div class="bar" style="width:83px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>8</strong></td>
+          <td><strong>Autoescuela Sensal</strong></td>
+          <td>Autoescuela</td>
+          <td>964 049 338</td>
+          <td><span class="badge desact">Web desactualizada</span></td>
+          <td><div class="score-bar"><span class="score-num">8.0</span><div class="bar" style="width:80px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>9</strong></td>
+          <td><strong>VH Estilistas</strong></td>
+          <td>Peluquería</td>
+          <td>964 737 699</td>
+          <td><span class="badge sin-web">Sin web</span></td>
+          <td><div class="score-bar"><span class="score-num">7.8</span><div class="bar" style="width:78px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>10</strong></td>
+          <td><strong>Talleres Cardona Benages</strong></td>
+          <td>Taller mecánico</td>
+          <td>964 226 208</td>
+          <td><span class="badge sin-web">Sin web</span></td>
+          <td><div class="score-bar"><span class="score-num">7.8</span><div class="bar" style="width:78px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>11</strong></td>
+          <td>AK Peluqueros</td>
+          <td>Peluquería</td>
+          <td>964 250 242</td>
+          <td><span class="badge solo-redes">Solo Facebook</span></td>
+          <td><div class="score-bar"><span class="score-num">7.5</span><div class="bar" style="width:75px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>12</strong></td>
+          <td>Cadu Taller</td>
+          <td>Taller mecánico</td>
+          <td>642 594 689</td>
+          <td><span class="badge sin-web">Sin web</span></td>
+          <td><div class="score-bar"><span class="score-num">7.5</span><div class="bar" style="width:75px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>13</strong></td>
+          <td>Reyes Agut Peluquería</td>
+          <td>Peluquería</td>
+          <td>643 997 099</td>
+          <td><span class="badge sin-web">Sin web</span></td>
+          <td><div class="score-bar"><span class="score-num">7.3</span><div class="bar" style="width:73px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>14</strong></td>
+          <td>Saints Barbershop</td>
+          <td>Barbería</td>
+          <td>964 819 935</td>
+          <td><span class="badge sin-web">Sin web</span></td>
+          <td><div class="score-bar"><span class="score-num">7.2</span><div class="bar" style="width:72px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>15</strong></td>
+          <td>Peluquería Gloria Mollón</td>
+          <td>Peluquería</td>
+          <td>964 200 030</td>
+          <td><span class="badge sin-web">Sin web</span></td>
+          <td><div class="score-bar"><span class="score-num">7.0</span><div class="bar" style="width:70px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>16</strong></td>
+          <td>AUTODICAR S.L.</td>
+          <td>Taller mecánico</td>
+          <td>964 280 553</td>
+          <td><span class="badge sin-web">Sin web</span></td>
+          <td><div class="score-bar"><span class="score-num">7.0</span><div class="bar" style="width:70px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>17</strong></td>
+          <td>Sweet World Heladería</td>
+          <td>Hostelería</td>
+          <td>602 385 215</td>
+          <td><span class="badge sin-web">Sin web</span></td>
+          <td><div class="score-bar"><span class="score-num">6.8</span><div class="bar" style="width:68px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>18</strong></td>
+          <td>Rubén Duat Peluquería</td>
+          <td>Peluquería</td>
+          <td>964 047 717</td>
+          <td><span class="badge sin-web">Sin web</span></td>
+          <td><div class="score-bar"><span class="score-num">6.7</span><div class="bar" style="width:67px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>19</strong></td>
+          <td>Talleres Lucas</td>
+          <td>Taller mecánico</td>
+          <td>637 865 880</td>
+          <td><span class="badge sin-web">Sin web</span></td>
+          <td><div class="score-bar"><span class="score-num">6.5</span><div class="bar" style="width:65px"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>20</strong></td>
+          <td>Carrillo Taller</td>
+          <td>Taller mecánico</td>
+          <td>964 245 658</td>
+          <td><span class="badge sin-web">Sin web</span></td>
+          <td><div class="score-bar"><span class="score-num">6.3</span><div class="bar" style="width:63px"></div></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TOP 5 ANÁLISIS DETALLADO -->
+  <h2><span class="icon">🏆</span> Top 5 mejores oportunidades — Análisis detallado</h2>
+  <div class="prospect-grid">
+
+    <!-- #1 LUIS SOS -->
+    <div class="pcard" data-rank="1">
+      <div class="score-big">9.5</div>
+      <h3>Luis Sos Fontanería</h3>
+      <div class="sector">Fontanería · Instalaciones · Gas</div>
+      <div class="info-row"><span class="ico">📞</span><span>Sin teléfono público localizado</span></div>
+      <div class="info-row"><span class="ico">📍</span><span>Castellón de la Plana</span></div>
+      <div class="info-row"><span class="ico">📱</span><span>Facebook: /fontaneria.luissos y /luissosfontaneria</span></div>
+      <div class="info-row"><span class="ico">🏢</span><span>Más de 60 años de experiencia en el sector</span></div>
+      <div class="problems">
+        <p>🔴 <strong>Sin página web propia</strong> — únicamente Facebook</p>
+        <p>🔴 Empresa centenaria sin presencia Google</p>
+        <p>🟡 No aparece en búsquedas de "fontanero Castellón"</p>
+        <p>🟡 Clientes potenciales no los pueden encontrar online</p>
+      </div>
+      <div class="msg-block">
+        <div class="msg-title">💬 Mensaje de contacto sugerido</div>
+        <p>Hola, he visto que Luis Sos Fontanería lleva más de 60 años en Castellón y me ha impresionado vuestra trayectoria. Sin embargo, cuando busco "fontanero Castellón" en Google, no os encuentro porque no tenéis página web. Os estáis perdiendo muchos clientes nuevos que buscan online. Os propongo crear una web sencilla y profesional que os posicione en Google desde el primer mes. ¿Podemos hablar 10 minutos esta semana?</p>
+      </div>
+      <div class="contact-row">
+        <a class="contact-btn btn-fb" href="https://www.facebook.com/fontaneria.luissos" target="_blank">Facebook</a>
+      </div>
+    </div>
+
+    <!-- #2 JOYERÍA FONT -->
+    <div class="pcard" data-rank="2">
+      <div class="score-big">9.2</div>
+      <h3>Joyería Font</h3>
+      <div class="sector">Joyería · Relojería · Montblanc</div>
+      <div class="info-row"><span class="ico">📞</span><span>964 242 618</span></div>
+      <div class="info-row"><span class="ico">📍</span><span>C/ Alloza, 68 Bajo, 12001 Castellón</span></div>
+      <div class="info-row"><span class="ico">✉️</span><span>joyeriafontsl@hotmail.com</span></div>
+      <div class="info-row"><span class="ico">🏢</span><span>Fundada en 1935 · Distribuidora oficial Montblanc</span></div>
+      <div class="problems">
+        <p>🔴 <strong>Sin página web propia</strong> — solo Facebook</p>
+        <p>🔴 Email en @hotmail.com — muy poco profesional</p>
+        <p>🔴 90 años de historia sin presencia digital seria</p>
+        <p>🟡 No pueden mostrar su catálogo online</p>
+      </div>
+      <div class="msg-block">
+        <div class="msg-title">💬 Mensaje de contacto sugerido</div>
+        <p>Buenos días, soy diseñador web y he visto que Joyería Font lleva desde 1935 en Castellón — una historia increíble. Hoy en día, el 80% de las personas buscan joyerías en Google antes de entrar a una tienda, y vosotros no aparecéis. Una web elegante con vuestro catálogo os pondría por delante de la competencia. ¿Puedo pasaros una propuesta sin compromiso?</p>
+      </div>
+      <div class="contact-row">
+        <a class="contact-btn btn-phone" href="tel:964242618">964 242 618</a>
+        <a class="contact-btn btn-email" href="mailto:joyeriafontsl@hotmail.com">Email</a>
+      </div>
+    </div>
+
+    <!-- #3 ANA ESTEVE -->
+    <div class="pcard" data-rank="3">
+      <div class="score-big">9.0</div>
+      <h3>Ana Esteve Estilistas</h3>
+      <div class="sector">Peluquería · Estilismo</div>
+      <div class="info-row"><span class="ico">📞</span><span>615 210 373</span></div>
+      <div class="info-row"><span class="ico">📍</span><span>Avda. Tombatossals, 99, 12004 Castellón</span></div>
+      <div class="info-row"><span class="ico">🌐</span><span>Sin web · Sin redes sociales localizadas</span></div>
+      <div class="problems">
+        <p>🔴 <strong>Cero presencia digital</strong> — ni web ni redes</p>
+        <p>🔴 Invisible en Google Maps de forma efectiva</p>
+        <p>🟡 Competidores con Instagram acaparan clientes jóvenes</p>
+        <p>🟡 Sin reserva online pierden citas</p>
+      </div>
+      <div class="msg-block">
+        <div class="msg-title">💬 Mensaje de contacto sugerido</div>
+        <p>Hola Ana, soy diseñador web. Buscando peluquerías en Castellón me he dado cuenta de que no tenéis web ni presencia en Google. Hoy las peluquerías que más llenan son las que tienen web con reserva online. Os creo una web en 2 semanas con reserva de cita, galería de trabajos y posicionamiento en Google. ¿Os llamo para explicaros cómo funciona?</p>
+      </div>
+      <div class="contact-row">
+        <a class="contact-btn btn-phone" href="tel:615210373">615 210 373</a>
+      </div>
+    </div>
+
+    <!-- #4 DANI VOZME -->
+    <div class="pcard" data-rank="4">
+      <div class="score-big">8.8</div>
+      <h3>Dani Vozme Hair Studio</h3>
+      <div class="sector">Peluquería · Estudio de estilismo</div>
+      <div class="info-row"><span class="ico">📞</span><span>622 152 595</span></div>
+      <div class="info-row"><span class="ico">📍</span><span>Plaza Juan XXIII, 3, 12004 Castellón</span></div>
+      <div class="info-row"><span class="ico">🌐</span><span>Sin web · Sin redes localizadas</span></div>
+      <div class="problems">
+        <p>🔴 <strong>Sin página web</strong></p>
+        <p>🔴 El nombre "Hair Studio" sugiere imagen premium — pero sin web no puede proyectarla</p>
+        <p>🟡 No puede mostrar portfolio de trabajos online</p>
+        <p>🟡 Sin reserva online está perdiendo clientes millennial/Gen Z</p>
+      </div>
+      <div class="msg-block">
+        <div class="msg-title">💬 Mensaje de contacto sugerido</div>
+        <p>Hola Dani, veo que tenéis un Hair Studio en la Plaza Juan XXIII pero no tenéis web ni Instagram activo. Los estudios de estilismo con más éxito en Castellón son los que muestran sus trabajos online. Os diseño una web moderna con galería, reserva de cita y posicionamiento en Google. ¿Podemos hablar?</p>
+      </div>
+      <div class="contact-row">
+        <a class="contact-btn btn-phone" href="tel:622152595">622 152 595</a>
+      </div>
+    </div>
+
+    <!-- #5 AUTOESCUELA SENSAL -->
+    <div class="pcard" data-rank="5" style="border-left-color:#3b82f6">
+      <div class="score-big" style="color:#3b82f6">8.0</div>
+      <h3>Autoescuela Sensal</h3>
+      <div class="sector">Autoescuela · 30+ años de experiencia</div>
+      <div class="info-row"><span class="ico">📞</span><span>964 049 338 (Castellón) · 964 563 737 (Almazora)</span></div>
+      <div class="info-row"><span class="ico">📍</span><span>C/ Cronista Revest, 13, 12005 Castellón</span></div>
+      <div class="info-row"><span class="ico">🌐</span><span>autoescolasensal.com (sin actualizar desde 2020)</span></div>
+      <div class="info-row"><span class="ico">📱</span><span>Facebook e Instagram</span></div>
+      <div class="problems">
+        <p>🟡 <strong>Web desactualizada</strong> — sin cambios desde diciembre 2020</p>
+        <p>🟡 Diseño anticuado de hace 5-10 años</p>
+        <p>🟡 Sin sistema de reserva online de clases prácticas</p>
+        <p>🟡 Contenido estático, sin blog ni SEO activo</p>
+      </div>
+      <div class="msg-block">
+        <div class="msg-title">💬 Mensaje de contacto sugerido</div>
+        <p>Hola, he visitado la web de Autoescola Sensal y veo que no se actualiza desde 2020 y tiene un diseño de hace muchos años. Las autoescuelas con mejor reputación online tienen webs modernas con reserva de clases y testimonios. Os rediseño la web con una imagen actualizada y un sistema de reserva online que os ahorrará llamadas. ¿Os paso una propuesta?</p>
+      </div>
+      <div class="contact-row">
+        <a class="contact-btn btn-phone" href="tel:964049338">964 049 338</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MENSAJES LISTOS PARA ENVIAR -->
+  <h2><span class="icon">✉️</span> Mensajes listos para copiar y enviar</h2>
+  <div class="msg-section">
+
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-icon whatsapp">📱</div>
+        <div>
+          <h4>WhatsApp / Llamada — Joyería Font</h4>
+          <div class="subtitle">Para llamar al 964 242 618 o enviar WhatsApp si disponible</div>
+        </div>
+      </div>
+      <div class="msg-box">Hola, buenos días. Me llamo [tu nombre] y me dedico al diseño web en Castellón.
+
+He visto que Joyería Font lleva desde 1935 aquí en la ciudad — es impresionante esa trayectoria. Buscando en Google "joyería Castellón" me doy cuenta de que no aparecéis con web propia, y eso es una oportunidad enorme que estáis perdiendo cada día.
+
+Os propongo crear una web elegante que muestre vuestro catálogo, vuestra historia y que aparezca en Google cuando alguien busque una joyería en Castellón.
+
+¿Tendríais 15 minutos esta semana para que os cuente cómo funciona?</div>
+    </div>
+
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-icon email">✉️</div>
+        <div>
+          <h4>Email — Joyería Font</h4>
+          <div class="subtitle">Enviar a joyeriafontsl@hotmail.com</div>
+        </div>
+      </div>
+      <div class="msg-box">Asunto: Vuestra web en Google — propuesta para Joyería Font
+
+Buenos días,
+
+Me llamo [tu nombre] y soy diseñador web en Castellón.
+
+He visto que Joyería Font lleva desde 1935 en la ciudad y tiene una reputación excelente. Sin embargo, cuando busco "joyería Castellón" en Google, no aparecéis con una página web propia.
+
+Esto significa que cada día hay personas buscando una joyería online que no os encuentran y van a la competencia.
+
+Os propongo:
+• Una web profesional y elegante con vuestro catálogo
+• Posicionamiento en Google para "joyería Castellón"
+• Diseño adaptado a móviles y tablets
+• Formulario de contacto y WhatsApp directo
+
+Precio cerrado, sin permanencia.
+
+¿Puedo enviaros una propuesta sin compromiso?
+
+Un saludo,
+[Tu nombre]
+[Tu teléfono]</div>
+    </div>
+
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-icon whatsapp">📱</div>
+        <div>
+          <h4>WhatsApp — Peluquerías (Ana Esteve, Dani Vozme, VH Estilistas)</h4>
+          <div class="subtitle">Plantilla adaptable para las 3 peluquerías sin web</div>
+        </div>
+      </div>
+      <div class="msg-box">Hola [nombre], soy [tu nombre], diseñador web en Castellón.
+
+He buscado vuestra peluquería online y me he dado cuenta de que no tenéis página web. Las peluquerías que más reservas consiguen hoy en día son las que tienen web con:
+
+✅ Galería de trabajos y transformaciones
+✅ Reserva de cita online (sin llamadas)
+✅ Aparición en Google cuando buscan "peluquería [barrio/Castellón]"
+
+Os creo la web en 2 semanas, con diseño moderno y reserva de citas incluida.
+
+¿Os puedo llamar esta semana para contaros más?</div>
+    </div>
+
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-icon whatsapp">📱</div>
+        <div>
+          <h4>WhatsApp — Talleres mecánicos (Ultimateauto, Cardona, Cadu)</h4>
+          <div class="subtitle">Plantilla adaptable para talleres sin web</div>
+        </div>
+      </div>
+      <div class="msg-box">Hola, soy [tu nombre], diseñador web en Castellón.
+
+He buscado vuestro taller en Google y no aparecéis con web propia. Cuando alguien busca "taller mecánico Castellón" desde el móvil, va al primero que encuentra. Si no tenéis web, perdéis esos clientes.
+
+Os propongo una web sencilla con:
+✅ Vuestros servicios y precios
+✅ Cita previa online (os ahorra llamadas)
+✅ Aparición en Google Maps y búsquedas
+✅ Reseñas y valoraciones visibles
+
+Precio fijo, sin sorpresas.
+
+¿Hablamos esta semana?</div>
+    </div>
+
+  </div>
+
+  <!-- EXPORT JSON -->
+  <h2><span class="icon">📦</span> Exportar datos (JSON para CRM / Google Sheets)</h2>
+  <div class="json-section">
+    <button class="copy-btn" onclick="copyJSON()">Copiar JSON</button>
+    <div class="json-box" id="jsonData">[
+  {
+    "rank": 1,
+    "nombre": "Luis Sos Fontanería",
+    "sector": "Fontanería",
+    "telefono": "",
+    "email": "",
+    "direccion": "Castellón de la Plana",
+    "web": "",
+    "redes": "Facebook: /fontaneria.luissos",
+    "estado_digital": "sin_web",
+    "puntuacion": 9.5,
+    "prioridad": "ALTA",
+    "notas": "Más de 60 años de experiencia. Sin web propia. Solo Facebook."
+  },
+  {
+    "rank": 2,
+    "nombre": "Joyería Font",
+    "sector": "Joyería / Relojería",
+    "telefono": "964242618",
+    "email": "joyeriafontsl@hotmail.com",
+    "direccion": "C/ Alloza, 68 Bajo, 12001 Castellón",
+    "web": "",
+    "redes": "Facebook",
+    "estado_digital": "solo_redes",
+    "puntuacion": 9.2,
+    "prioridad": "ALTA",
+    "notas": "Fundada en 1935. Email en hotmail. Sin web propia. Distribuidor oficial Montblanc."
+  },
+  {
+    "rank": 3,
+    "nombre": "Ana Esteve Estilistas",
+    "sector": "Peluquería",
+    "telefono": "615210373",
+    "email": "",
+    "direccion": "Avda. Tombatossals, 99, 12004 Castellón",
+    "web": "",
+    "redes": "",
+    "estado_digital": "sin_web",
+    "puntuacion": 9.0,
+    "prioridad": "ALTA",
+    "notas": "Sin web ni redes sociales localizadas. Cero presencia digital."
+  },
+  {
+    "rank": 4,
+    "nombre": "Dani Vozme Hair Studio",
+    "sector": "Peluquería / Estilismo",
+    "telefono": "622152595",
+    "email": "",
+    "direccion": "Plaza Juan XXIII, 3, 12004 Castellón",
+    "web": "",
+    "redes": "",
+    "estado_digital": "sin_web",
+    "puntuacion": 8.8,
+    "prioridad": "ALTA",
+    "notas": "Nombre premium 'Hair Studio' pero sin presencia digital."
+  },
+  {
+    "rank": 5,
+    "nombre": "Sandra Zahonero Estilistas",
+    "sector": "Peluquería / Hair Spa",
+    "telefono": "964063858",
+    "email": "",
+    "direccion": "Plaza Real, 21, 12001 Castellón",
+    "web": "",
+    "redes": "Instagram: @sandrazahoneroestilistas",
+    "estado_digital": "solo_redes",
+    "puntuacion": 8.7,
+    "prioridad": "ALTA",
+    "notas": "Solo Instagram. Sin web. Perfil activo con seguidores."
+  },
+  {
+    "rank": 6,
+    "nombre": "Talleres Ultimateauto",
+    "sector": "Taller mecánico",
+    "telefono": "628678720",
+    "email": "",
+    "direccion": "Pol. Rda. Sur, Nave 35, 12006 Castellón",
+    "web": "",
+    "redes": "",
+    "estado_digital": "sin_web",
+    "puntuacion": 8.5,
+    "prioridad": "ALTA",
+    "notas": "Sin web. Solo en directorios de pago. Polígono industrial."
+  },
+  {
+    "rank": 7,
+    "nombre": "Peluquería Julia Garrido & Julio Valls",
+    "sector": "Peluquería",
+    "telefono": "964231733",
+    "email": "",
+    "direccion": "Av. Casalduch, 6 Bajo, 12005 Castellón",
+    "web": "",
+    "redes": "Facebook",
+    "estado_digital": "solo_redes",
+    "puntuacion": 8.3,
+    "prioridad": "MEDIA-ALTA",
+    "notas": "Solo Facebook. Sin web propia."
+  },
+  {
+    "rank": 8,
+    "nombre": "Autoescuela Sensal",
+    "sector": "Autoescuela",
+    "telefono": "964049338",
+    "email": "",
+    "direccion": "C/ Cronista Revest, 13, 12005 Castellón",
+    "web": "autoescolasensal.com",
+    "redes": "Facebook, Instagram",
+    "estado_digital": "web_desactualizada",
+    "puntuacion": 8.0,
+    "prioridad": "MEDIA-ALTA",
+    "notas": "Web sin actualizar desde dic. 2020. Diseño antiguo. Sin reserva online."
+  },
+  {
+    "rank": 9,
+    "nombre": "VH Estilistas",
+    "sector": "Peluquería",
+    "telefono": "964737699",
+    "email": "",
+    "direccion": "C/ Honori Garcia i Garcia, 11, 12006 Castellón",
+    "web": "",
+    "redes": "",
+    "estado_digital": "sin_web",
+    "puntuacion": 7.8,
+    "prioridad": "MEDIA",
+    "notas": "Sin web ni redes."
+  },
+  {
+    "rank": 10,
+    "nombre": "Talleres Cardona Benages",
+    "sector": "Taller mecánico",
+    "telefono": "964226208",
+    "email": "",
+    "direccion": "Plaza Escultor Adsuara, 9, 12003 Castellón",
+    "web": "",
+    "redes": "",
+    "estado_digital": "sin_web",
+    "puntuacion": 7.8,
+    "prioridad": "MEDIA",
+    "notas": "Sin web. Solo en Páginas Amarillas."
+  }
+]</div>
+  </div>
+
+</div>
+
+<footer>
+  Informe generado el <strong>26 de mayo de 2026</strong> · Prospección para servicios de diseño web en <strong>Castellón de la Plana</strong>
+</footer>
+
+<script>
+function copyJSON() {
+  const text = document.getElementById('jsonData').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✅ Copiado!';
+    setTimeout(() => btn.textContent = 'Copiar JSON', 2000);
+  });
+}
+</script>
+</body>
+</html>
